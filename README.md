@@ -1,8 +1,7 @@
 # f1utter
 
-A new Flutter project.
+Simple F1 Race countdown app
 
-## Getting Started
+## Build
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+Clone, make sure you have all dependecies and run
