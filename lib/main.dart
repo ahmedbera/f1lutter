@@ -3,6 +3,7 @@ import 'race_card.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'cache.dart';
 
 void main() => runApp(new MyApp());
 
@@ -47,37 +48,60 @@ class _MyHomePageState extends State<MyHomePage> {
   TextStyle smallTextStyle = new TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white70);
 
   var res;
-  
-  getRaces() async {
+
+  instantiateRaces(races) {
+
+    races = races["MRData"]["RaceTable"]["Races"];
+
+    for (var race in races) {
+      Race _race = new Race(
+        race["Circuit"]["circuitId"], 
+        race["raceName"], race["date"], 
+        race["time"], 
+        race["Circuit"]["Location"]["locality"], 
+        race["Circuit"]["Location"]["country"]
+      );
+      
+      if(closestRace == null && !_race.isCompleted) {
+        setState(() {
+          countDown = closestRace.raceTime.toUtc().difference(new DateTime.now().toUtc()).abs();
+          closestRace = _race;
+          remainingDays = countDown.inDays.toString();
+          remainingHours = (countDown.inHours % 24).toString();
+          remainingMinutes = (-countDown.inMinutes % 60).toString();
+          remainingSeconds = (countDown.inSeconds % 60).toString();
+        });
+      }
+      raceList.add(_race);
+      _calculateRemaningTime();
+    }
+  }
+  getRacesFromApi() async {
     var httpClient = new HttpClient();
     var uri = new Uri.https("ergast.com","/api/f1/2018.json");
     var request = await httpClient.getUrl(uri);
     var response = await request.close();
     if (response.statusCode == HttpStatus.OK) {
       var json = await response.transform(UTF8.decoder).join();
+      CacheHelper.writeRaceCache(json);
       res = JSON.decode(json);
-      var races = res["MRData"]["RaceTable"]["Races"];
-      for (var race in races) {
-
-        Race _race = new Race(
-          race["Circuit"]["circuitId"], 
-          race["raceName"], race["date"], 
-          race["time"], 
-          race["Circuit"]["Location"]["locality"], 
-          race["Circuit"]["Location"]["country"]
-        );
-        
-        if(closestRace == null && !_race.isCompleted) {
-          setState(() {
-            closestRace = _race;
-          });
-        }
-        raceList.add(_race);
-        _calculateRemaningTime();
-      }
+      instantiateRaces(res);
     } else {
       res = 'Error getting IP address:\nHttp status ${response.statusCode}';
     }
+  }
+  
+  getRaces() async {
+    CacheHelper.checkFile().then((fileExists) {
+      if(fileExists) {
+        CacheHelper.readRaceCache().then((json) {
+          var races = JSON.decode(json);
+          instantiateRaces(races);
+        });
+      } else {
+        getRacesFromApi();
+      }
+    });
   }
 
   _calculateRemaningTime() {
