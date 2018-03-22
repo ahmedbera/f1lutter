@@ -59,7 +59,7 @@ class _RaceCardState extends State<RaceCard> {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return new InkWell(
       onTap: this._handleTap,
       child: new Container(
         decoration: new BoxDecoration(border: new Border(bottom: new BorderSide(color: Theme.of(context).dividerColor))),
@@ -100,5 +100,4 @@ class _RaceCardState extends State<RaceCard> {
       )
     );
   }
-
 }

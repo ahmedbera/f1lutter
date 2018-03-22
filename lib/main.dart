@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'race_card.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 import 'cache.dart';
 
 void main() => runApp(new MyApp());
@@ -126,6 +127,89 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Widget _currentRaceWidget () {
+    return new Container(
+      padding: new EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child : new Row(
+        children: <Widget>[
+          new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // Flag + Country + City
+              new Row(
+                children: <Widget>[
+                  new Image.asset('assets/flags/'+ closestRace.country+'.png', height: 16.0,),
+                  new Text(" " + closestRace.city + ", ", style: smallTextStyle),
+                  new Text(closestRace.country, style: smallTextStyle)
+                ],
+              ),
+              // Name, Date
+              new Container(
+                margin: new EdgeInsets.symmetric(vertical: 4.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Text(closestRace.title, style: new TextStyle(fontSize: 22.0, color: Colors.white)),
+                    new Text(closestRace.raceTime.toLocal().toString(), style: new TextStyle(fontSize: 18.0, color: Colors.white70)),
+                  ],
+                ),
+              ),
+              // Countdown
+              new Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  new Text(remainingDays, style: countdownIntStyle),
+                  new Text(" D ", style: countdownStrStyle,),
+                  new Text(remainingHours, style: countdownIntStyle),
+                  new Text(" H ", style: countdownStrStyle,),
+                  new Text(remainingMinutes, style: countdownIntStyle),
+                  new Text(" M ", style: countdownStrStyle,),
+                  new Text(remainingSeconds, style: countdownIntStyle),
+                  new Text(" S ", style: countdownStrStyle)
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _gradientWidget() {
+    return new Container(
+      decoration: new BoxDecoration(
+        image: new DecorationImage(
+          image: new ExactAssetImage('assets/flags/'+ closestRace.country+'.png'),
+          fit: BoxFit.cover,
+        ),
+        gradient: new LinearGradient(
+          begin: const Alignment(0.0, -1.0),
+          end: const Alignment(0.0, 0.6),
+          colors: <Color>[
+            const Color(0xffef5350),
+            const Color(0x00ef5350)
+          ],
+        ),
+      ),
+      child: new BackdropFilter(
+        filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: new Container(
+            decoration: new BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
+              gradient: new LinearGradient(
+                begin: const Alignment(0.0, .0),
+                end: const Alignment(1.0, .0),
+                colors: <Color> [
+                  Colors.black.withOpacity(1.0),
+                  Colors.black.withOpacity(0.30)
+                ]
+              )
+            ),
+          ),
+      ),
+    );
+  }
+
   @override
   initState() {
     super.initState();
@@ -156,47 +240,17 @@ class _MyHomePageState extends State<MyHomePage> {
             this.isLoading ? new Text("Loading") :
             new Container(
               color: Colors.grey.shade800,
-              child: new Padding(
-                padding: new EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child : new Row(
-                  children: <Widget>[
-                    new Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        new Row(
-                          children: <Widget>[
-                            new Image.asset('assets/flags/'+ closestRace.country+'.png', height: 16.0,),
-                            new Text(" " + closestRace.city + ", ", style: smallTextStyle),
-                            new Text(closestRace.country, style: smallTextStyle)
-                          ],
-                        ),
-                        new Container(
-                          margin: new EdgeInsets.symmetric(vertical: 4.0),
-                          child: new Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              new Text(closestRace.title, style: new TextStyle(fontSize: 22.0, color: Colors.white)),
-                              new Text(closestRace.raceTime.toLocal().toString(), style: new TextStyle(fontSize: 18.0, color: Colors.white70)),
-                            ],
-                          ),
-                        ),
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            new Text(remainingDays, style: countdownIntStyle),
-                            new Text(" D ", style: countdownStrStyle,),
-                            new Text(remainingHours, style: countdownIntStyle),
-                            new Text(" H ", style: countdownStrStyle,),
-                            new Text(remainingMinutes, style: countdownIntStyle),
-                            new Text(" M ", style: countdownStrStyle,),
-                            new Text(remainingSeconds, style: countdownIntStyle),
-                            new Text(" S ", style: countdownStrStyle)
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              child: new Stack(
+                children: <Widget>[
+                  new Positioned(
+                    left: 0.0,
+                    right: 0.0,
+                    bottom: 0.0,
+                    top: 0.0,
+                    child: _gradientWidget()
+                  ),
+                  _currentRaceWidget()
+                ],
               ),
             ),
             new Flexible (
