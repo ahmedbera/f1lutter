@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String remainingSeconds = "";
   Duration oneSecond = new Duration(seconds: 1);
   List raceList = new List();
-
+  
   TextStyle countdownIntStyle = new TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.white);
   TextStyle countdownStrStyle = new TextStyle(fontSize: 16.0, color: Colors.white70);
   TextStyle smallTextStyle = new TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white70);
@@ -61,13 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
       if(closestRace == null && !_race.isCompleted) {
         setState(() {
           closestRace = _race;
-          countDown = closestRace.raceTime.toUtc().difference(new DateTime.now().toUtc()).abs();
-          closestRace = _race;
-          remainingDays = countDown.inDays.toString();
-          remainingHours = (countDown.inHours % 24).toString();
-          remainingMinutes = (-countDown.inMinutes % 60).toString();
-          remainingSeconds = (countDown.inSeconds % 60).toString();
         });
+        _updateRemainingTime();
       }
       raceList.add(_race);
       _calculateRemaningTime();
@@ -91,13 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _calculateRemaningTime() {
     new Timer.periodic(oneSecond, (Timer t) {
-      setState((){
-        countDown = closestRace.raceTime.toUtc().difference(new DateTime.now().toUtc()).abs();
-        remainingDays = countDown.inDays.toString();
-        remainingHours = (countDown.inHours % 24).toString();
-        remainingMinutes = (-countDown.inMinutes % 60).toString();
-        remainingSeconds = (countDown.inSeconds % 60).toString();
-      });
+      _updateRemainingTime();
     });
     setState(() {
       isLoading = false;
@@ -119,10 +108,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handleRaceTap(Race race) {
     setState(() {
       this.closestRace = race;
+    });
+    _updateRemainingTime();
+  }
+
+  void _updateRemainingTime() {
+    setState(() {
       countDown = closestRace.raceTime.toUtc().difference(new DateTime.now().toUtc()).abs();
       remainingDays = countDown.inDays.toString();
       remainingHours = (countDown.inHours % 24).toString();
-      remainingMinutes = (-countDown.inMinutes % 60).toString();
+      remainingMinutes = (countDown.inMinutes % 60).toString();
       remainingSeconds = (countDown.inSeconds % 60).toString();
     });
   }

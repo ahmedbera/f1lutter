@@ -37,14 +37,17 @@ class CacheHelper {
 
   static Future<bool> checkFile() async {
     File file = await CacheHelper._localFile;
-    return file.path.contains('cache.json');
+    if(file.existsSync()) {
+      return file.length().then((len) => len > 5);
+    } else {
+      return false;
+    }
   }
 }
 
 class ApiHelper {
   
   static Future<String> getRaces() async {
-    var res;
     var httpClient = new HttpClient();
     var uri = new Uri.https("ergast.com","/api/f1/2018.json");
     var request = await httpClient.getUrl(uri);
@@ -52,11 +55,11 @@ class ApiHelper {
     if (response.statusCode == HttpStatus.OK) {
       var json = await response.transform(UTF8.decoder).join();
       CacheHelper.writeRaceCache(json);
-      res = JSON.decode(json);
+      return JSON.decode(json);
     } else {
-      res = 'Error getting IP address:\nHttp status ${response.statusCode}';
+      return 'Error getting IP address:\nHttp status ${response.statusCode}';
     }
-    return res;
+    //return res;
   }
   
 }
