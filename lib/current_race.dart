@@ -20,6 +20,7 @@ class _CurrentRaceState extends State<CurrentRace> {
   String remainingHours = "";
   String remainingSeconds = "";
   Duration oneSecond = new Duration(seconds: 1);
+  Timer timer;
 
   TextStyle countdownIntStyle = new TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.white);
   TextStyle countdownStrStyle = new TextStyle(fontSize: 16.0, color: Colors.white70);
@@ -36,7 +37,7 @@ class _CurrentRaceState extends State<CurrentRace> {
   }
 
   void _initTimer() {
-    new Timer.periodic(oneSecond, (Timer t) {
+    this.timer = new Timer.periodic(oneSecond, (Timer t) {
       _updateRemainingTime();
     });
   }
@@ -47,6 +48,12 @@ class _CurrentRaceState extends State<CurrentRace> {
     this._updateRemainingTime();
     super.initState();
     this._initTimer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    this.timer.cancel();
   }
   
 
