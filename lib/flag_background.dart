@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'race_card.dart';
+import 'models/Race.dart';
 import 'dart:ui';
 
 class FlagBackground extends StatelessWidget {

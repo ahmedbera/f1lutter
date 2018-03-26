@@ -4,7 +4,8 @@ import 'package:f1utter/race_card.dart';
 import 'package:f1utter/cache.dart';
 import 'package:f1utter/current_race.dart';
 import 'package:f1utter/flag_background.dart';
-
+import 'package:f1utter/api.dart';
+import 'package:f1utter/models/Race.dart';
 
 class CountdownPage extends StatefulWidget {
   CountdownPage({Key key}) : super(key: key);
@@ -27,8 +28,9 @@ class _CountdownPageState extends State<CountdownPage> {
   Duration oneSecond = new Duration(seconds: 1);
   List raceList = new List();
  
-  instantiateRaces(races) {
-    races = races["MRData"]["RaceTable"]["Races"];
+  instantiateRaces(res) {
+    res = JSON.decode(res);
+    var races = res["MRData"]["RaceTable"]["Races"];
 
     for (var race in races) {
       Race _race = new Race(
@@ -53,15 +55,14 @@ class _CountdownPageState extends State<CountdownPage> {
     CacheHelper.checkFile().then((fileExists) {
       if(fileExists) {
         CacheHelper.readRaceCache().then((json) {
-          var races = JSON.decode(json);
-          instantiateRaces(races);
+          instantiateRaces(json);
         });
       } else {
         ApiHelper.getRaces().then((res) {
           instantiateRaces(res);
         });
       }
-    });
+    }); 
   }
 
   void _handleRaceTap(Race race) {
@@ -79,35 +80,35 @@ class _CountdownPageState extends State<CountdownPage> {
   @override
   Widget build(BuildContext context) {
     return new Column(
-          children: <Widget>[
-            this.isLoading ? new Text("Loading") :
-            new Container(
-              color: Colors.grey.shade800,
-              child: new Stack(
-                children: <Widget>[
-                  new Positioned(
-                    left: 0.0,
-                    right: 0.0,
-                    bottom: 0.0,
-                    top: 0.0,
-                    child: new FlagBackground(closestRace: this.closestRace)
-                  ),
-                  this.closestRace == null ? 
-                    null : 
-                    new CurrentRace(race: this.closestRace),
-                ],
+      children: <Widget>[
+        this.isLoading ? new Text("Loading") :
+        new Container(
+          color: Colors.grey.shade800,
+          child: new Stack(
+            children: <Widget>[
+              new Positioned(
+                left: 0.0,
+                right: 0.0,
+                bottom: 0.0,
+                top: 0.0,
+                child: new FlagBackground(closestRace: this.closestRace)
               ),
-            ),
-            new Flexible (
-              child: new ListView.builder(
-                itemCount: raceList.length,                 
-                itemBuilder: (context,int index) {
-                  Race currentRace = raceList[index];
-                  return new RaceCard(race: currentRace, onChanged: this._handleRaceTap);
-                },
-              ),
-            ),
-          ],
-      );
-    }
+              this.closestRace == null ? 
+                null : 
+                new CurrentRace(race: this.closestRace),
+            ],
+          ),
+        ),
+        new Flexible (
+          child: new ListView.builder(
+            itemCount: raceList.length,                 
+            itemBuilder: (context,int index) {
+              Race currentRace = raceList[index];
+              return new RaceCard(race: currentRace, onChanged: this._handleRaceTap);
+            },
+          ),
+        ),
+      ],
+    );
+  }
 }
