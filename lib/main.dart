@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'pages/countdown_page.dart';
 import 'pages/standings_page.dart';
 
