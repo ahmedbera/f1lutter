@@ -1,81 +1,30 @@
 import 'package:flutter/material.dart';
-import 'race_card.dart';
-import 'dart:convert';
-import 'cache.dart';
-import 'current_race.dart';
-import 'flag_background.dart';
 
-void main() => runApp(new MyApp());
+import 'pages/countdown_page.dart';
+import 'pages/standings_page.dart';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'F1utter',
-      home: new MyHomePage(title: 'F1utter', swatch: Colors.blue),
-    );
-  }
-}
+void main() => runApp(new F1utter());
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, this.swatch}) : super(key: key);
-
-  final String title;
-  final ColorSwatch swatch;
+class F1utter extends StatefulWidget{
+  F1utter({Key key});
 
   @override
-  _MyHomePageState createState() {
-    return new _MyHomePageState();
-  }
+  _F1utterState createState() => new _F1utterState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _F1utterState extends State<F1utter> {
   Brightness brightness = Brightness.light;
-  bool isLoading = true;
-  Race closestRace;
-  Duration countDown = new Duration();
-  String remainingDays = "";
-  String remainingMinutes = "";
-  String remainingHours = "";
-  String remainingSeconds = "";
-  Duration oneSecond = new Duration(seconds: 1);
-  List raceList = new List();
- 
-  instantiateRaces(races) {
-    races = races["MRData"]["RaceTable"]["Races"];
+  int currentTab = 0;
+  CountdownPage countdownPage = new CountdownPage();
+  StandingsPage standingsPage = new StandingsPage();
+  List<Widget> pages;
+  Widget currentPage;
 
-    for (var race in races) {
-      Race _race = new Race(
-        race["Circuit"]["circuitId"], 
-        race["raceName"], race["date"], 
-        race["time"], 
-        race["Circuit"]["Location"]["locality"], 
-        race["Circuit"]["Location"]["country"]
-      );
-      
-      if(closestRace == null && !_race.isCompleted) {
-        setState(() {
-          closestRace = _race;
-          isLoading = false;
-        });
-      }
-      raceList.add(_race);
-    }
-  }
-  
-  getRaces() async {
-    CacheHelper.checkFile().then((fileExists) {
-      if(fileExists) {
-        CacheHelper.readRaceCache().then((json) {
-          var races = JSON.decode(json);
-          instantiateRaces(races);
-        });
-      } else {
-        ApiHelper.getRaces().then((res) {
-          instantiateRaces(res);
-        });
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+    pages = [countdownPage, standingsPage];
+    currentPage = countdownPage;
   }
 
   _toggleTheme() {
@@ -89,70 +38,54 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     }
   }
-
-  void _handleRaceTap(Race race) {
+  
+  _tabTapped (int tappedTab) {
     setState(() {
-      this.closestRace = race;
+      currentTab = tappedTab;
+      currentPage = this.pages[tappedTab];
     });
   }
 
   @override
-  initState() {
-    super.initState();
-    getRaces();
-  }
-  
-  @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      theme: new ThemeData( 
-        brightness: brightness,
-        primarySwatch: widget.swatch,
-        accentColor: Colors.tealAccent,
-      ),
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text(widget.title),
-           actions: <Widget>[
-             new IconButton(
-               icon: new Icon(Icons.lightbulb_outline),
-               tooltip: "Toggle Theme",
-               onPressed: this._toggleTheme,
-             )
-           ],
+      title: 'F1utter',
+      home: new MaterialApp(
+        theme: new ThemeData( 
+          primarySwatch: Colors.red,
+          accentColor: Colors.tealAccent,
+          brightness: this.brightness,
         ),
-        body: new Column(
-          children: <Widget>[
-            this.isLoading ? new Text("Loading") :
-            new Container(
-              color: Colors.grey.shade800,
-              child: new Stack(
-                children: <Widget>[
-                  new Positioned(
-                    left: 0.0,
-                    right: 0.0,
-                    bottom: 0.0,
-                    top: 0.0,
-                    child: new FlagBackground(closestRace: this.closestRace)
-                  ),
-                  this.closestRace == null ? 
-                    null : 
-                    new CurrentRace(race: this.closestRace),
-                ],
+        home: new Scaffold(
+          appBar: new AppBar(
+            title: new Text("F1utter"),
+            actions: <Widget>[
+              new IconButton(
+                icon: new Icon(Icons.lightbulb_outline),
+                tooltip: "Toggle Theme",
+                onPressed: this._toggleTheme,
+              )
+            ],
+          ),
+          bottomNavigationBar: new BottomNavigationBar(
+            currentIndex: currentTab,
+            onTap: this._tabTapped,
+            items: <BottomNavigationBarItem>[
+              new BottomNavigationBarItem( // tab 0
+                icon: new Icon(Icons.timer),
+                title: new Text("Schedule")
               ),
-            ),
-            new Flexible (
-              child: new ListView.builder(
-                itemCount: raceList.length,                 
-                itemBuilder: (context,int index) {
-                  Race currentRace = raceList[index];
-                  return new RaceCard(race: currentRace, onChanged: this._handleRaceTap);
-                },
-              ),
-            ),
-          ],
+              new BottomNavigationBarItem( // tab 1
+                icon: new Icon(Icons.equalizer),
+                title: new Text("Rankings")
+              )
+            ],
+          ),
+          body: this.currentPage,
         ),
-      ),
+      )
+      //new CountdownPage(title: 'F1utter', swatch: Colors.blue),
     );
   }
 }
+
