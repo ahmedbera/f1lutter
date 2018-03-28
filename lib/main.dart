@@ -13,9 +13,11 @@ class F1utter extends StatefulWidget{
 
 class _F1utterState extends State<F1utter> {
   Brightness brightness = Brightness.light;
+  Color accent = Colors.orangeAccent.shade700;
   int currentTab = 0;
   CountdownPage countdownPage = new CountdownPage();
   StandingsPage standingsPage = new StandingsPage();
+
   List<Widget> pages;
   Widget currentPage;
 
@@ -30,10 +32,12 @@ class _F1utterState extends State<F1utter> {
     if(this.brightness == Brightness.light) {
       setState(() {
         this.brightness = Brightness.dark;
+        this.accent = Colors.blueAccent.shade700;
       });
     } else {
       setState(() {
         this.brightness = Brightness.light;
+        this.accent = Colors.orangeAccent.shade700;
       });
     }
   }
@@ -52,7 +56,7 @@ class _F1utterState extends State<F1utter> {
       home: new MaterialApp(
         theme: new ThemeData( 
           primarySwatch: Colors.red,
-          accentColor: Colors.tealAccent,
+          accentColor: this.accent,
           brightness: this.brightness,
         ),
         home: new Scaffold(
@@ -67,23 +71,23 @@ class _F1utterState extends State<F1utter> {
             ],
           ),
           bottomNavigationBar: new BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             currentIndex: currentTab,
             onTap: this._tabTapped,
             items: <BottomNavigationBarItem>[
               new BottomNavigationBarItem( // tab 0
                 icon: new Icon(Icons.timer),
-                title: new Text("Schedule")
+                title: new Text("Schedule"),
               ),
               new BottomNavigationBarItem( // tab 1
                 icon: new Icon(Icons.equalizer),
-                title: new Text("Standings")
-              )
+                title: new Text("Drivers"),
+              ),
             ],
           ),
           body: this.currentPage,
         ),
       )
-      //new CountdownPage(title: 'F1utter', swatch: Colors.blue),
     );
   }
 }
