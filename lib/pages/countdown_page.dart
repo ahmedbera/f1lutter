@@ -82,7 +82,7 @@ class _CountdownPageState extends State<CountdownPage> {
     return new Column(
       children: <Widget>[
         this.isLoading ? new Text("Loading") :
-        new Container(
+          new Container(
           color: Colors.grey.shade800,
           child: new Stack(
             children: <Widget>[

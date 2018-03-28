@@ -76,7 +76,7 @@ class _F1utterState extends State<F1utter> {
               ),
               new BottomNavigationBarItem( // tab 1
                 icon: new Icon(Icons.equalizer),
-                title: new Text("Rankings")
+                title: new Text("Standings")
               )
             ],
           ),
