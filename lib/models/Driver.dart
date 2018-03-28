@@ -18,6 +18,11 @@ class Driver {
 
 }
 
-class Constructor {
-
+class DriverStandingModel {
+  Driver driver;
+  String position;
+  String points;
+  String wins;
+  
+  DriverStandingModel(this.driver, this.position, this.points, this.wins);
 }
