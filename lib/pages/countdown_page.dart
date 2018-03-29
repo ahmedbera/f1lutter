@@ -29,12 +29,13 @@ class _CountdownPageState extends State<CountdownPage> {
   List raceList = new List();
  
   instantiateRaces(res) {
-    res = JSON.decode(res);
+    res = json.decode(res);
     var races = res["MRData"]["RaceTable"]["Races"];
 
     for (var race in races) {
       Race _race = new Race(
         race["Circuit"]["circuitId"], 
+        race["round"],
         race["raceName"], race["date"], 
         race["time"], 
         race["Circuit"]["Location"]["locality"], 

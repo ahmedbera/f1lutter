@@ -46,12 +46,17 @@ class _StandingsPageState extends State<StandingsPage> {
     });
   }
 
-  Widget _getDriverStandings() {
+  Widget _getStandings() {
     return new Flexible (
       child: new ListView.builder(
-        itemCount: driverStandingsList.length,                 
+        itemCount: this.standingType == "Driver Standings" ? driverStandingsList.length : constructorStandingsList.length,
         itemBuilder: (context,int index) {
-          DriverStandingModel currentDriver = driverStandingsList[index];
+          var currentItem;
+          if(this.standingType == "Driver Standings") {
+            currentItem = driverStandingsList[index];
+          } else if(this.standingType == "Constructor Standings") {
+            currentItem = constructorStandingsList[index];
+          }
           return new Container(
             color: index % 2 == 1 ?
               Theme.of(context).brightness == Brightness.light ? Colors.grey.shade100 : Colors.grey.shade800 : 
@@ -64,57 +69,20 @@ class _StandingsPageState extends State<StandingsPage> {
                   child: new Container(
                     alignment: Alignment.centerRight,
                     width: 24.0,
-                    child: new Text(currentDriver.position, textAlign: TextAlign.center, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                    child: new Text(currentItem.position, textAlign: TextAlign.center, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
                   ),
                 ),
                 new Expanded(
                   child: new Padding(
                     padding: new EdgeInsets.all(8.0),
-                    child: new Text("${currentDriver.driver.givenName} ${currentDriver.driver.familyName}", textAlign: TextAlign.start,),
+                    child: this.standingType == "Driver Standings" ? 
+                      new Text("${currentItem.driver.givenName} ${currentItem.driver.familyName}", textAlign: TextAlign.start) :
+                      new Text("${currentItem.constructor.name}", textAlign: TextAlign.start)
                   ),
                 ),
                 new Padding(
                   padding: new EdgeInsets.all(8.0),
-                  child: new Text(currentDriver.points + " pts", textAlign: TextAlign.end,)
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _getConstructorStandings() {
-    return new Flexible(
-      child: new ListView.builder(
-        itemCount: constructorStandingsList.length,
-        itemBuilder: (context, int index) {
-          ConstructorStandingModel currentCtor = constructorStandingsList[index];
-          return new Container(
-            color: index % 2 == 1 ?
-              Theme.of(context).brightness == Brightness.light ? Colors.grey.shade100 : Colors.grey.shade800 : 
-              Colors.transparent,
-            child: new Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                new Padding(
-                  padding: new EdgeInsets.all(6.0),
-                  child: new Container(
-                    alignment: Alignment.centerRight,
-                    width: 24.0,
-                    child: new Text(currentCtor.position, textAlign: TextAlign.center, style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                  ),
-                ),
-                new Expanded(
-                  child: new Padding(
-                    padding: new EdgeInsets.all(8.0),
-                    child: new Text("${currentCtor.constructor.name}", textAlign: TextAlign.start,),
-                  ),
-                ),
-                new Padding(
-                  padding: new EdgeInsets.all(8.0),
-                  child: new Text(currentCtor.points + " pts", textAlign: TextAlign.end,)
+                  child: new Text(currentItem.points + " pts", textAlign: TextAlign.end,)
                 ),
               ],
             ),
@@ -175,7 +143,7 @@ class _StandingsPageState extends State<StandingsPage> {
             ],
           ),
         ),
-        this.standingType == "Driver Standings" ? _getDriverStandings() : _getConstructorStandings(),
+        _getStandings(),
       ],
     );
   }

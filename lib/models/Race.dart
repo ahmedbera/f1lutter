@@ -1,5 +1,6 @@
 class Race {
   String id;
+  String round;
   String title;
   String date;
   String time;
@@ -8,7 +9,7 @@ class Race {
   DateTime raceTime;
   bool isCompleted = false;
 
-  Race(this.id, this.title, this.date, this.time, this.city, this.country) {
+  Race(this.id, this.round, this.title, this.date, this.time, this.city, this.country) {
     try {
       raceTime = DateTime.parse(date + " " + time).toLocal();
       if(raceTime.difference(new DateTime.now()) < new Duration(seconds: 1)) {
