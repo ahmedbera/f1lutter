@@ -4,14 +4,29 @@ class Race {
   String title;
   String date;
   String time;
-  String country;
   String city;
+  String country;
   DateTime raceTime;
   bool isCompleted = false;
 
   Race(this.id, this.round, this.title, this.date, this.time, this.city, this.country) {
+    _calculateDate();
+  }
+
+  Race.fromJson(race) {
+    this.id = race["Circuit"]["circuitId"];
+    this.round = race["round"];
+    this.title = race["raceName"];
+    this.date = race["date"];
+    this.time = race["time"];
+    this.city = race["Circuit"]["Location"]["locality"];
+    this.country = race["Circuit"]["Location"]["country"];
+    _calculateDate();
+  }
+
+  _calculateDate() {
     try {
-      raceTime = DateTime.parse(date + " " + time).toLocal();
+      raceTime = DateTime.parse(this.date + " " + this.time).toLocal();
       if(raceTime.difference(new DateTime.now()) < new Duration(seconds: 1)) {
         this.isCompleted = true;
       }
@@ -20,4 +35,5 @@ class Race {
       print(e);
     }
   }
+  
 }

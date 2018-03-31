@@ -33,15 +33,8 @@ class _CountdownPageState extends State<CountdownPage> {
     var races = res["MRData"]["RaceTable"]["Races"];
 
     for (var race in races) {
-      Race _race = new Race(
-        race["Circuit"]["circuitId"], 
-        race["round"],
-        race["raceName"], race["date"], 
-        race["time"], 
-        race["Circuit"]["Location"]["locality"], 
-        race["Circuit"]["Location"]["country"]
-      );
-      
+      Race _race = new Race.fromJson(race);
+
       if(closestRace == null && !_race.isCompleted) {
         setState(() {
           closestRace = _race;

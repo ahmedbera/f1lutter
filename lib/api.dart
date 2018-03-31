@@ -51,15 +51,7 @@ class ApiHelper {
       for(var driver in driverStandings) {
         standingsList.add(
           new DriverStandingModel(
-            new Driver(
-              driver["Driver"]["driverId"],
-              driver["Driver"]["permanentNumber"],
-              driver["Driver"]["code"],
-              driver["Driver"]["familyName"],
-              driver["Driver"]["givenName"],
-              driver["Driver"][new DateTime.now()],
-              driver["Driver"]["nationality"]
-            ),
+            new Driver.fromJson(driver["Driver"]),
             driver["position"],
             driver["points"],
             driver["wins"],          
@@ -89,11 +81,7 @@ class ApiHelper {
       for(var ctor in constructorStandings) {
         standingsList.add(
           new ConstructorStandingModel(
-            new Constructor(
-              ctor["Constructor"]["constructorId"],
-              ctor["Constructor"]["name"],
-              ctor["Constructor"]["nationality"],
-            ),
+            new Constructor.fromJson(ctor["Constructor"]),
             ctor["position"],
             ctor["points"],
             ctor["wins"],   

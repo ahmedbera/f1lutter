@@ -3,15 +3,7 @@ class DriverList {
 
   static Driver driver({driverEntry}) {
     if(!driverList.containsKey(driverEntry["driverId"])) {
-      driverList[driverEntry["driverId"]] = new Driver(
-        driverEntry["driverId"],
-        driverEntry["permanentNumber"],
-        driverEntry["code"],
-        driverEntry["familyName"],
-        driverEntry["givenName"],
-        new DateTime.now(),
-        driverEntry["nationality"]
-      );
+      driverList[driverEntry["driverId"]] = new Driver.fromJson(driverEntry);
     }
     return driverList[driverEntry["driverId"]];
   }
@@ -25,6 +17,16 @@ class Driver {
   String familyName;
   DateTime dateOfBirth;
   String nationality;
+
+  Driver.fromJson(obj) {
+    this.driverId = obj["driverId"];
+    this.permanentNumber = obj["permanentNumber"];
+    this.code = obj["code"];
+    this.givenName = obj["familyName"];
+    this.familyName = obj["givenName"];
+    this.dateOfBirth = new DateTime.now();
+    this.nationality = obj["nationality"];
+  }
 
   Driver(
     this.driverId,

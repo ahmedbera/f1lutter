@@ -3,11 +3,7 @@ class ConstructorList {
 
   static Constructor constructor({constructorEntry}) {
     if(!constructorList.containsKey(constructorEntry["constructorId"])) {
-      constructorList[constructorEntry["constructorId"]] = new Constructor(
-        constructorEntry["constructorId"],
-        constructorEntry["name"],
-        constructorEntry["nationality"],
-      );
+      constructorList[constructorEntry["constructorId"]] = new Constructor.fromJson(constructorEntry);
     }
     return constructorList[constructorEntry["constructorId"]]; 
   }
@@ -17,6 +13,12 @@ class Constructor {
   String constructorId;
   String name;
   String nationality;
+
+  Constructor.fromJson(obj) {
+    this.constructorId = obj["constructorId"];
+    this.name = obj["name"];
+    this.nationality = obj["nationality"];
+  }
 
   Constructor(
     this.constructorId,
