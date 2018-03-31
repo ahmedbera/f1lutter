@@ -2,18 +2,17 @@ class DriverList {
   static Map driverList = new Map();
 
   static Driver driver({driverEntry}) {
-    if(driverList.containsKey(driverEntry["driverId"])) {
-      return driverList[driverEntry["driverId"]];
+    if(!driverList.containsKey(driverEntry["driverId"])) {
+      driverList[driverEntry["driverId"]] = new Driver(
+        driverEntry["driverId"],
+        driverEntry["permanentNumber"],
+        driverEntry["code"],
+        driverEntry["familyName"],
+        driverEntry["givenName"],
+        new DateTime.now(),
+        driverEntry["nationality"]
+      );
     }
-    driverList[driverEntry["driverId"]] = new Driver(
-      driverEntry["driverId"],
-      driverEntry["permanentNumber"],
-      driverEntry["code"],
-      driverEntry["familyName"],
-      driverEntry["givenName"],
-      new DateTime.now(),
-      driverEntry["nationality"]
-    );
     return driverList[driverEntry["driverId"]];
   }
 }
