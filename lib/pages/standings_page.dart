@@ -19,7 +19,7 @@ class _StandingsPageState extends State<StandingsPage> {
   String year = "2018";
   String standingType = "Driver Standings";
 
-  bool isExpanded = false;
+  bool isLoading = true;
 
   void _driverStandings() {
     ApiHelper.getDriverStandings().then((res) {
@@ -27,6 +27,7 @@ class _StandingsPageState extends State<StandingsPage> {
           this.driverStandingsList = res["standings"];
           this.round = res["round"];
           this.year = res["year"];
+          this.isLoading = false;
         });
     });
   }
@@ -47,7 +48,8 @@ class _StandingsPageState extends State<StandingsPage> {
   }
 
   Widget _getStandings() {
-    return new Flexible (
+    return this.isLoading ? new Center(child: new CircularProgressIndicator()) :
+    new Flexible (
       child: new ListView.builder(
         itemCount: this.standingType == "Driver Standings" ? driverStandingsList.length : constructorStandingsList.length,
         itemBuilder: (context,int index) {

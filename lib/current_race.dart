@@ -22,9 +22,9 @@ class _CurrentRaceState extends State<CurrentRace> {
   Duration oneSecond = new Duration(seconds: 1);
   Timer timer;
 
-  TextStyle countdownIntStyle = new TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.white);
-  TextStyle countdownStrStyle = new TextStyle(fontSize: 16.0, color: Colors.white70);
-  TextStyle smallTextStyle = new TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white70);
+  TextStyle countdownIntStyle = new TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.white, textBaseline: TextBaseline.alphabetic);
+  TextStyle countdownStrStyle = new TextStyle(fontSize: 16.0, color: Colors.white70, textBaseline: TextBaseline.alphabetic);
+  TextStyle smallTextStyle = new TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white70, textBaseline: TextBaseline.alphabetic);
   
   void _updateRemainingTime() {
     setState(() {
@@ -90,16 +90,29 @@ class _CurrentRaceState extends State<CurrentRace> {
               widget.race.isCompleted ?
                 new Text("Race Completed", style: countdownIntStyle) :
                 new Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  textBaseline: TextBaseline.alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: <Widget>[
-                    new Text(remainingDays, style: countdownIntStyle),
-                    new Text(" D ", style: countdownStrStyle,),
+                    new Text(remainingDays, style: countdownIntStyle,),
+                    new Padding(
+                      padding: new EdgeInsets.only(right: 6.0, left: 2.0),
+                      child: new Text("D ", style: countdownStrStyle,),
+                    ),
                     new Text(remainingHours, style: countdownIntStyle),
-                    new Text(" H ", style: countdownStrStyle,),
+                    new Padding(
+                      padding: new EdgeInsets.only(right: 6.0, left: 2.0),
+                      child: new Text("H ", style: countdownStrStyle,),
+                    ),
                     new Text(remainingMinutes, style: countdownIntStyle),
-                    new Text(" M ", style: countdownStrStyle,),
+                    new Padding(
+                      padding: new EdgeInsets.only(right: 6.0, left: 2.0),
+                      child: new Text("M ", style: countdownStrStyle,),
+                    ),
                     new Text(remainingSeconds, style: countdownIntStyle),
-                    new Text(" S ", style: countdownStrStyle)
+                    new Padding(
+                      padding: new EdgeInsets.only(right: 6.0, left: 2.0),
+                      child: new Text("S ", style: countdownStrStyle),
+                    ),
                   ],
                 ),
             ],

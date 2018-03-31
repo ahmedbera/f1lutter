@@ -2,14 +2,13 @@ class ConstructorList {
   static Map constructorList = new Map();
 
   static Constructor constructor({constructorEntry}) {
-    if(constructorList.containsKey(constructorEntry["constructorId"])) {
-      return constructorList[constructorEntry["constructorId"]];
+    if(!constructorList.containsKey(constructorEntry["constructorId"])) {
+      constructorList[constructorEntry["constructorId"]] = new Constructor(
+        constructorEntry["constructorId"],
+        constructorEntry["name"],
+        constructorEntry["nationality"],
+      );
     }
-    constructorList[constructorEntry["constructorId"]] = new Constructor(
-      constructorEntry["constructorId"],
-      constructorEntry["name"],
-      constructorEntry["nationality"],
-    );
     return constructorList[constructorEntry["constructorId"]]; 
   }
 

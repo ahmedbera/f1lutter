@@ -108,6 +108,8 @@ class ApiHelper {
       };
 
       return requestResponse;
+    }).catchError((onError) {
+      return "An Error Occured";
     });
   }
 

@@ -12,8 +12,10 @@ class RaceResultPage extends StatefulWidget {
 }
 
 class RaceResultsPageState extends State<RaceResultPage> {
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   List<RaceResult> raceResults = new List();
   List<DataRow> dataRows = new List();
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -33,7 +35,7 @@ class RaceResultsPageState extends State<RaceResultPage> {
               new DataCell(new Text(row.status)),
               new DataCell(new Text(row.time)),
               new DataCell(new Text(row.fastestLapTime)),
-              new DataCell(new Text(row.avgSpeed))
+              new DataCell(new Text(row.avgSpeed + " km/H"))
             ]
           )
         );
@@ -42,37 +44,49 @@ class RaceResultsPageState extends State<RaceResultPage> {
       this.setState(() {
         raceResults = res;
         this.dataRows = rows;
+        this.isLoading = false;
       });
-
+    }).catchError((onError){
+      _snackBar(onError);
     });
+  }
+
+  void _snackBar(msg) {
+    scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(msg)));
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: this.scaffoldKey,
       appBar: new AppBar(
         title: new Text(widget.raceData.title),
       ),
-      body: new SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: new SingleChildScrollView(
-         scrollDirection: Axis.vertical,
-          child: new DataTable(
-            columns: [
-              new DataColumn(label: new Text("Pos")),
-              new DataColumn(label: new Text("Driver")),
-              new DataColumn(label: new Text("Grid")),
-              new DataColumn(label: new Text("Laps")),
-              new DataColumn(label: new Text("Status")),
-              new DataColumn(label: new Text("Time")),
-              new DataColumn(label: new Text("Fastest Lap")),
-              new DataColumn(label: new Text("Average Speed")),
-            ],
-            rows: this.dataRows,
-          ),
-        )
-      ),
+      body: this.isLoading ? 
+      new Center(child: new CircularProgressIndicator()) :
+      new Builder(
+        builder: (BuildContext context) {
+          return new SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: new SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+              child: new DataTable(
+                columns: [
+                  new DataColumn(label: new Text("Pos")),
+                  new DataColumn(label: new Text("Driver")),
+                  new DataColumn(label: new Text("Grid")),
+                  new DataColumn(label: new Text("Laps")),
+                  new DataColumn(label: new Text("Status")),
+                  new DataColumn(label: new Text("Time")),
+                  new DataColumn(label: new Text("Fastest Lap")),
+                  new DataColumn(label: new Text("Average Speed")),
+                ],
+                rows: this.dataRows,
+              ),
+            )
+          );
+        },
+      )
     );
   }
-
 }
