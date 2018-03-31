@@ -105,48 +105,51 @@ class _StandingsPageState extends State<StandingsPage> {
   Widget build(BuildContext context) {
     return new Column(
       children: <Widget>[
-        new Container(
-          padding: new EdgeInsets.all(4.0),
-          color: Theme.of(context).accentColor,
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              new FlatButton(
-                onPressed: () => print("hello"),
-                child: new Text("Round: " + this.round),
-              ),
-              new Expanded(
-                child: new Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    new Text(this.standingType, style: new TextStyle(fontWeight: FontWeight.w500),),
-                    new Flexible(
-                      child: new PopupMenuButton(
-                        onSelected: _standingTypeSelected,
-                        itemBuilder: (BuildContext context) {
-                          return [
-                            new PopupMenuItem(
-                              value: "Driver Standings",
-                              child: new Text("Driver Standings"),
-                            ),
-                            new PopupMenuItem(
-                              value: "Constructor Standings",
-                              child: new Text("Constructor Standings"),
-                            ),
-                          ];
-                        },
-                      ),
+        new Row(
+          mainAxisSize: MainAxisSize.max,
+           mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Flexible(
+              fit: FlexFit.tight,
+              child: new Ink(
+                color: Theme.of(context).accentColor,
+                child: new InkWell(
+                  child: new Padding(
+                    padding: new EdgeInsets.all(16.0),
+                    child: new Text(
+                      "Drivers", 
+                      textAlign: TextAlign.center, 
+                      style: new TextStyle(color: this.standingType.startsWith("D") ? Colors.white : Colors.white70, 
+                      fontWeight: FontWeight.w500)
                     ),
-                  ],
+                  ),
+                  onTap: () {this._standingTypeSelected("Driver Standings");}
                 ),
               ),
-            ],
-          ),
+            ),
+            new Flexible(
+              fit: FlexFit.tight,
+              child: new Ink(
+                color: Theme.of(context).accentColor,
+                child: new InkWell(
+                  child: new Padding(
+                    padding: new EdgeInsets.all(16.0),
+                    child: new Text(
+                      "Constructors", 
+                      textAlign: TextAlign.center, 
+                      style: new TextStyle(color: this.standingType.startsWith("C") ? Colors.white : Colors.white70, 
+                      fontWeight: FontWeight.w500)
+                    ),
+                  ),
+                  onTap: () {this._standingTypeSelected("Constructor Standings");}
+                ),
+              )
+            ),
+          ],
         ),
         _getStandings(),
       ],
     );
   }
+
 }
