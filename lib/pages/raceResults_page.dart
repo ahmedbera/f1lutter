@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:f1utter/models/Race.dart';
 import 'package:f1utter/api.dart';
+import 'package:f1utter/persistent_state.dart';
 
 class RaceResultPage extends StatefulWidget {
   RaceResultPage({Key key, this.raceData }) : super(key: key);
@@ -13,46 +14,58 @@ class RaceResultPage extends StatefulWidget {
 
 class RaceResultsPageState extends State<RaceResultPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  List<RaceResult> raceResults = new List();
   List<DataRow> dataRows = new List();
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    ApiHelper.getRaceResultsByRound(year: widget.raceData.raceTime.year.toString(), round: widget.raceData.round).then((res) {
+    if(GlobalData.raceResults.value.length > 0) {
+      _fillRows();
+      return;
+    }
+    
+    GlobalData.raceResults.addListener(_fillRows);
 
-      List<DataRow> rows = new List();
-      
-      for(var row in res) {
-        rows.add(
-          new DataRow(
-            cells: [
-              new DataCell(new Text(row.position)),
-              new DataCell(new Text(row.driver.givenName + " " + row.driver.familyName)),
-              new DataCell(new Text(row.grid)),
-              new DataCell(new Text(row.laps)),
-              new DataCell(new Text(row.status)),
-              new DataCell(new Text(row.time)),
-              new DataCell(new Text(row.fastestLapTime)),
-              new DataCell(new Text(row.avgSpeed + " km/H"))
-            ]
-          )
-        );
-      }
-      
-      this.setState(() {
-        raceResults = res;
-        this.dataRows = rows;
-        this.isLoading = false;
-      });
+    ApiHelper.getRaceResultsByRound(year: widget.raceData.raceTime.year.toString(), round: widget.raceData.round).then((res) {
+      GlobalData.raceResults.value = res;
     }).catchError((onError){
       _snackBar(onError);
     });
   }
 
+  void _fillRows() {
+    var res = GlobalData.raceResults.value;
+
+    if(res.length == 0) { return; }
+
+    List<DataRow> rows = new List();
+    
+    for(var row in res) {
+      rows.add(
+        new DataRow(
+          cells: [
+            new DataCell(new Text(row.position)),
+            new DataCell(new Text(row.driver.givenName + " " + row.driver.familyName)),
+            new DataCell(new Text(row.grid)),
+            new DataCell(new Text(row.laps)),
+            new DataCell(new Text(row.status)),
+            new DataCell(new Text(row.time)),
+            new DataCell(new Text(row.fastestLapTime)),
+            new DataCell(new Text(row.avgSpeed + " km/H"))
+          ]
+        )
+      );
+    } 
+    
+    this.setState(() {
+        this.dataRows = rows;
+        this.isLoading = false;
+    });
+  }
+
   void _snackBar(msg) {
-    scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(msg)));
+    scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(msg.toString())));
   }
 
   @override

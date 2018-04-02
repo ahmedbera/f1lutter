@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'models/Race.dart';
+import 'package:f1utter/models/Race.dart';
 import 'dart:async';
 
 class CurrentRace extends StatefulWidget {

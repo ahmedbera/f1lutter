@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:f1utter/api.dart';
 import 'package:f1utter/models/Driver.dart';
 import 'package:f1utter/models/Constructors.dart';
+import 'package:f1utter/persistent_state.dart';
 
 class StandingsPage extends StatefulWidget {
   StandingsPage({Key key}) : super(key: key);
@@ -15,29 +16,37 @@ class StandingsPage extends StatefulWidget {
 class _StandingsPageState extends State<StandingsPage> {
   List<DriverStandingModel> driverStandingsList = new List();
   List<ConstructorStandingModel> constructorStandingsList = new List();
+  var driverListener = GlobalData.driverStandings;
+  var ctorListener = GlobalData.constructorStandings;
   String round = "0";
   String year = "2018";
   String standingType = "Driver Standings";
 
   bool isLoading = true;
 
-  void _driverStandings() {
-    ApiHelper.getDriverStandings().then((res) {
-        this.setState(() {
-          this.driverStandingsList = res["standings"];
-          this.round = res["round"];
-          this.year = res["year"];
-          this.isLoading = false;
-        });
-    });
+  _driverStandings() {
+    if(GlobalData.driverStandings.value.isEmpty) {
+      ApiHelper.getDriverStandings();
+    } else {
+      this.setState(() {
+        this.driverStandingsList = GlobalData.driverStandings.value["standings"];
+        this.round = GlobalData.driverStandings.value["round"];
+        this.year = GlobalData.driverStandings.value["year"];
+        this.isLoading = false;
+      });
+    }
   }
 
-  void _constructorStandings() {
-    ApiHelper.getConstructorStandings().then((res) {
-        this.setState(() {
-          this.constructorStandingsList = res["standings"];
-        });
-    });
+  _constructorStandings() {
+    if(GlobalData.constructorStandings.value.isEmpty) {
+      ApiHelper.getConstructorStandings().then((res) {
+        GlobalData.constructorStandings.value = res;
+      });
+    } else {
+      this.setState(() {
+        this.constructorStandingsList = GlobalData.constructorStandings.value["standings"];
+      });
+    }
   }
 
   _standingTypeSelected(String type) {
@@ -97,8 +106,17 @@ class _StandingsPageState extends State<StandingsPage> {
   @override
   void initState() {
     super.initState();
+    this.driverListener.addListener(_driverStandings);
+    this.ctorListener.addListener(_constructorStandings);
     _driverStandings();
     _constructorStandings();
+  }
+
+  @override
+  void dispose() {
+    this.driverListener.removeListener(_driverStandings);
+    this.ctorListener.removeListener(_constructorStandings);
+    super.dispose();
   }
     
   @override

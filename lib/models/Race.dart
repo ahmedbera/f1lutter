@@ -1,3 +1,7 @@
+import 'package:f1utter/models/Driver.dart';
+import 'package:f1utter/models/Constructors.dart';
+
+
 class Race {
   String id;
   String round;
@@ -34,6 +38,22 @@ class Race {
       raceTime = new DateTime(2018);
       print(e);
     }
-  }
-  
+  } 
+}
+
+class RaceResult {
+  String number;
+  String position;
+  String points;
+  Driver driver;
+  Constructor constructor;
+  String grid;
+  String laps;
+  String status;
+  String time;
+  String fastestLapRank;
+  String fastestLapTime;
+  String avgSpeed;
+
+  RaceResult({this.number, this.position, this.points, this.driver, this.constructor, this.grid, this.laps, this.status, this.time, this.fastestLapRank, this.fastestLapTime, this.avgSpeed});
 }

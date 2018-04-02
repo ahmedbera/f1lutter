@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:f1utter/race_card.dart';
+import 'package:f1utter/widgets/race_card.dart';
 import 'package:f1utter/cache.dart';
-import 'package:f1utter/current_race.dart';
-import 'package:f1utter/flag_background.dart';
+import 'package:f1utter/widgets/current_race.dart';
+import 'package:f1utter/widgets/flag_background.dart';
 import 'package:f1utter/api.dart';
 import 'package:f1utter/models/Race.dart';
 
@@ -27,7 +27,7 @@ class _CountdownPageState extends State<CountdownPage> {
   String remainingSeconds = "";
   Duration oneSecond = new Duration(seconds: 1);
   List raceList = new List();
- 
+
   instantiateRaces(res) {
     res = json.decode(res);
     var races = res["MRData"]["RaceTable"]["Races"];
