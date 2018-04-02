@@ -22,8 +22,8 @@ class Driver {
     this.driverId = obj["driverId"];
     this.permanentNumber = obj["permanentNumber"];
     this.code = obj["code"];
-    this.givenName = obj["familyName"];
-    this.familyName = obj["givenName"];
+    this.givenName = obj["givenName"];
+    this.familyName = obj["familyName"];
     this.dateOfBirth = new DateTime.now();
     this.nationality = obj["nationality"];
   }

@@ -1,7 +1,10 @@
 # f1utter
 
-Simple F1 Race countdown app
+Simple Formula 1 app.
++ Countdown remaining time until next race
++ Results of completed races
++ Driver and constructor standings
 
 ## Build
 
-Clone, make sure you have all dependecies and run
+Clone, make sure you have all dependecies and run.
