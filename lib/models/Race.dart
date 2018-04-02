@@ -1,7 +1,6 @@
 import 'package:f1utter/models/Driver.dart';
 import 'package:f1utter/models/Constructors.dart';
 
-
 class Race {
   String id;
   String round;

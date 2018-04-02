@@ -8,7 +8,7 @@ import 'package:f1utter/models/Race.dart';
 import 'package:f1utter/persistent_state.dart';
 
 class ApiHelper {
-  static final Uri _seasonUri = new Uri.https("ergast.com","/api/f1/2018.json");
+  static final Uri _seasonUri = new Uri.https("ergast.com","/api/f1/" + new DateTime.now().year.toString() +".json");
   
   static Uri driverStandingsUri([String year="current"]) {
     return new Uri.http("ergast.com", "/api/f1/" + year + "/driverStandings.json");
