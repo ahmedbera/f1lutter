@@ -4,7 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:f1utter/models/Driver.dart';
 import 'package:f1utter/models/Constructors.dart';
-
+import 'package:f1utter/models/Race.dart';
+import 'package:f1utter/persistent_state.dart';
 
 class ApiHelper {
   static final Uri _seasonUri = new Uri.https("ergast.com","/api/f1/2018.json");
@@ -64,6 +65,8 @@ class ApiHelper {
         "round" : standings["round"],
         "year" : standings["season"]
       };
+
+      GlobalData.driverStandings.value = requestResponse;
 
       return requestResponse;
     });
@@ -134,19 +137,3 @@ class ApiHelper {
 
 }
 
-class RaceResult {
-  String number;
-  String position;
-  String points;
-  Driver driver;
-  Constructor constructor;
-  String grid;
-  String laps;
-  String status;
-  String time;
-  String fastestLapRank;
-  String fastestLapTime;
-  String avgSpeed;
-
-  RaceResult({this.number, this.position, this.points, this.driver, this.constructor, this.grid, this.laps, this.status, this.time, this.fastestLapRank, this.fastestLapTime, this.avgSpeed});
-}
