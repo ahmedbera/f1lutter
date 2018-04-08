@@ -20,7 +20,7 @@ class RaceResultsPageState extends State<RaceResultPage> {
   @override
   void initState() {
     super.initState();
-    if(GlobalData.raceResults.value.length > 0) {
+    if(GlobalData.raceResults.value[widget.raceData.round] != null) {
       _fillRows();
       return;
     }
@@ -28,17 +28,19 @@ class RaceResultsPageState extends State<RaceResultPage> {
     GlobalData.raceResults.addListener(_fillRows);
 
     ApiHelper.getRaceResultsByRound(year: widget.raceData.raceTime.year.toString(), round: widget.raceData.round).then((res) {
-      GlobalData.raceResults.value = res;
+      //GlobalData.raceResults.value = res;
     }).catchError((onError){
       _snackBar(onError);
     });
   }
 
   void _fillRows() {
-    var res = GlobalData.raceResults.value;
-
-    if(res.length == 0) { return; }
-
+    var res = GlobalData.raceResults.value[widget.raceData.round];
+        
+    if(res?.length == 0) {
+      return; 
+    }
+    
     List<DataRow> rows = new List();
     
     for(var row in res) {

@@ -104,13 +104,19 @@ class ApiHelper {
     });
   }
 
-  static Future<List<RaceResult>> getRaceResultsByRound({String year="2018", String round}) {
+  static Future<Map> getRaceResultsByRound({String year="2018", String round}) {
     return makeRequest(raceResultUri(year: year, round: round)).then((res) {
       var response = json.decode(res);
-
+      
+      var results;
+      
+      try {
+        results = response["MRData"]["RaceTable"]["Races"][0]["Results"];
+      } catch (e) {
+        throw new StateError("Race results are not ready yet");
+      }
+      
       List<RaceResult> raceResultList = new List();
-
-      var results = response["MRData"]["RaceTable"]["Races"][0]["Results"];
 
       for (var result in results) {
         raceResultList.add(
@@ -130,8 +136,8 @@ class ApiHelper {
           )
         );
       }
-      
-      return raceResultList;
+
+      GlobalData.updateRaceResults(round, raceResultList);
     });
   }
 
