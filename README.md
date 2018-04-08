@@ -5,6 +5,11 @@ Simple Formula 1 app.
 + Results of completed races
 + Driver and constructor standings
 
+## Screenshots
+
+![Countdown](http://ahmedbera.github.io/img/f1utter1-preview.png)
+![Standings](http://ahmedbera.github.io/img/f1utter2-preview.png)
+
 ## Build
 
 Clone, make sure you have all dependecies and run.
