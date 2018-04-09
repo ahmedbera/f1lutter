@@ -130,9 +130,9 @@ class ApiHelper {
             laps: result["laps"],
             status: result["status"],
             time: result["Time"] != null ? result["Time"]["time"] : "Not Finished",
-            fastestLapRank: result["FastestLap"]["rank"],
-            fastestLapTime: result["FastestLap"]["Time"]["time"],
-            avgSpeed: result["FastestLap"]["AverageSpeed"]["speed"],
+            fastestLapRank: result["FastestLap"] != null ? result["FastestLap"]["rank"] : "No time",
+            fastestLapTime: result["FastestLap"] != null ? result["FastestLap"]["Time"]["time"] : "No time",
+            avgSpeed: result["FastestLap"] != null ? result["FastestLap"]["AverageSpeed"]["speed"] + " Km/H" : "No time",
           )
         );
       }

@@ -54,7 +54,7 @@ class RaceResultsPageState extends State<RaceResultPage> {
             new DataCell(new Text(row.status)),
             new DataCell(new Text(row.time)),
             new DataCell(new Text(row.fastestLapTime)),
-            new DataCell(new Text(row.avgSpeed + " km/H"))
+            new DataCell(new Text(row.avgSpeed))
           ]
         )
       );
