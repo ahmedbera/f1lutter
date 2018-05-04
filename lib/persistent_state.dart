@@ -12,4 +12,20 @@ class GlobalData extends ChangeNotifier{
     GlobalData.raceResults.notifyListeners();
   }
 
+  static ValueNotifier <Brightness> appBrightness = new ValueNotifier<Brightness>(Brightness.light);
+  static Color primarySwatch = Colors.red;
+  static Color accent = Colors.orangeAccent;
+
+  static void updateTheme(Brightness brightess) {
+    if(brightess == Brightness.dark) {
+      primarySwatch = Colors.blue;
+      accent = Colors.deepPurpleAccent;
+      appBrightness.value = Brightness.dark; // Update brightness value last since it calls listeners
+    } else if (brightess == Brightness.light) {
+      primarySwatch = Colors.red;
+      accent = Colors.orangeAccent;
+      print(accent);
+      appBrightness.value = Brightness.light; // Update brightness value last since it calls listeners
+    }
+  }
 }
