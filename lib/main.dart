@@ -15,7 +15,13 @@ class F1utter extends StatefulWidget{
   _F1utterState createState() {
     SharedPreferences.getInstance().then((prefs) {
       var br = prefs.getString("brightness");
-      GlobalData.updateTheme(br == "Brightness.dark" ? Brightness.dark : Brightness.light);
+      var primary = prefs.getInt("primary");
+      var accent = prefs.getInt("accent");
+      GlobalData.appBrightness.value = br == "Brightness.dark" ? Brightness.dark : Brightness.light;
+      if(primary != null)
+        GlobalData.primaryColor.value = Colors.primaries.where((color) => color.value == primary).first;
+      if(accent != null)
+        GlobalData.accentColor.value = Colors.accents.where((color) => color.value == accent).first;
     });
     return new _F1utterState();
   }
@@ -38,23 +44,27 @@ class _F1utterState extends State<F1utter> {
   void initState() {
     super.initState();
     GlobalData.appBrightness.addListener(_themeUpdated);
+    GlobalData.primaryColor.addListener(_themeUpdated);
+    GlobalData.accentColor.addListener(_themeUpdated);
     _themeUpdated();
     pages = [countdownPage, standingsPage, settingsPage];
     currentPage = countdownPage;
   }
 
   _themeUpdated() {
-    _saveUserTheme();
     setState(() {
       this.brightness = GlobalData.appBrightness.value;
-      this.accent = GlobalData.accent;
-      this.primarySwatch = GlobalData.primarySwatch;
+      this.accent = GlobalData.accentColor.value;
+      this.primarySwatch = GlobalData.primaryColor.value;
     });
+    _saveUserTheme();
   }
 
   _saveUserTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("brightness", this.brightness.toString());
+    await prefs.setInt("primary", this.primarySwatch.value);
+    await prefs.setInt("accent", this.accent.value);
   }
   
   _tabTapped(int tappedTab) {
