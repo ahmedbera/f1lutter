@@ -4,6 +4,8 @@ Simple Formula 1 app.
 + Countdown remaining time until next race
 + Results of completed races
 + Driver and constructor standings
++ Switch between dark and light theme
++ Customize primary and accent colors
 
 ## Screenshots
 
