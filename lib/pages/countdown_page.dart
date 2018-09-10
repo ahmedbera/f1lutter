@@ -20,11 +20,6 @@ class _CountdownPageState extends State<CountdownPage> {
   Brightness brightness = Brightness.light;
   bool isLoading = true;
   Race closestRace;
-  Duration countDown = new Duration();
-  String remainingDays = "";
-  String remainingMinutes = "";
-  String remainingHours = "";
-  String remainingSeconds = "";
   Duration oneSecond = new Duration(seconds: 1);
   List raceList = new List();
 
