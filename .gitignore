@@ -10,3 +10,4 @@ packages
 .flutter-plugins
 .history/
 .dart_tool/
+flutter_export_environment.sh
