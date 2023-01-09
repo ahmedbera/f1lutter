@@ -1,17 +1,16 @@
-# f1utter
+# f1lutter
 
-Simple Formula 1 app.
-+ Countdown remaining time until next race
-+ Results of completed races
-+ Driver and constructor standings
-+ Switch between dark and light theme
-+ Customize primary and accent colors
+A new Flutter project.
 
-## Screenshots
+## Getting Started
 
-![Countdown](http://ahmedbera.github.io/img/f1utter1-preview.png)
-![Standings](http://ahmedbera.github.io/img/f1utter2-preview.png)
+This project is a starting point for a Flutter application.
 
-## Build
+A few resources to get you started if this is your first Flutter project:
 
-Clone, make sure you have all dependecies and run.
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

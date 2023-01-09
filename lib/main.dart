@@ -1,116 +1,80 @@
+import 'package:f1lutter/routes/countdown_route.dart';
+import 'package:f1lutter/routes/settings_route.dart';
+import 'package:f1lutter/routes/standings_route.dart';
 import 'package:flutter/material.dart';
-import 'package:f1utter/pages/countdown_page.dart';
-import 'package:f1utter/pages/standings_page.dart';
-import 'package:f1utter/pages/settings_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:f1lutter/models/settings_model.dart';
 
-import 'package:f1utter/persistent_state.dart';
+void main() {
+  runApp(const App());
+}
 
-void main() => runApp(new F1utter());
+class App extends StatelessWidget {
+  const App({super.key});
 
-class F1utter extends StatefulWidget{
-  F1utter({Key key});
-  
   @override
-  _F1utterState createState() {
-    SharedPreferences.getInstance().then((prefs) {
-      var br = prefs.getString("brightness");
-      var primary = prefs.getInt("primary");
-      var accent = prefs.getInt("accent");
-      GlobalData.appBrightness.value = br == "Brightness.dark" ? Brightness.dark : Brightness.light;
-      if(primary != null)
-        GlobalData.primaryColor.value = Colors.primaries.where((color) => color.value == primary).first;
-      if(accent != null)
-        GlobalData.accentColor.value = Colors.accents.where((color) => color.value == accent).first;
-    });
-    return new _F1utterState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => Settings(),
+      child: const MainView(),
+    );
   }
 }
 
-class _F1utterState extends State<F1utter> {
-  Brightness brightness;
-  Color accent;
-  Color primarySwatch;
-  int currentTab = 0;
-
-  CountdownPage countdownPage = new CountdownPage();
-  StandingsPage standingsPage = new StandingsPage();
-  SettingsPage settingsPage = new SettingsPage();
-
-  List<Widget> pages;
-  Widget currentPage;
+class MainView extends StatefulWidget {
+  const MainView({super.key});
 
   @override
-  void initState() {
-    super.initState();
-    GlobalData.appBrightness.addListener(_themeUpdated);
-    GlobalData.primaryColor.addListener(_themeUpdated);
-    GlobalData.accentColor.addListener(_themeUpdated);
-    _themeUpdated();
-    pages = [countdownPage, standingsPage, settingsPage];
-    currentPage = countdownPage;
-  }
+  State<MainView> createState() => _MainViewState();
+}
 
-  _themeUpdated() {
-    setState(() {
-      this.brightness = GlobalData.appBrightness.value;
-      this.accent = GlobalData.accentColor.value;
-      this.primarySwatch = GlobalData.primaryColor.value;
-    });
-    _saveUserTheme();
-  }
+class _MainViewState extends State<MainView> {
+  int _selectedIndex = 0;
+  static const List<Widget> _widgetOptions = <Widget>[
+    CountdownRoute(),
+    StandingsRoute(),
+    SettingsRoute(),
+  ];
 
-  _saveUserTheme() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("brightness", this.brightness.toString());
-    await prefs.setInt("primary", this.primarySwatch.value);
-    await prefs.setInt("accent", this.accent.value);
-  }
-  
-  _tabTapped(int tappedTab) {
+  void _onDestinationSelected(int index) {
     setState(() {
-      currentTab = tappedTab;
-      currentPage = this.pages[tappedTab];
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'F1utter',
-      home: new MaterialApp(
-        theme: new ThemeData( 
-          primarySwatch: this.primarySwatch,
-          accentColor: this.accent,
-          brightness: this.brightness,
+    var settingsState = context.watch<Settings>();
+    return MaterialApp(
+      title: 'Namer App',
+      theme: settingsState.themeData,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("F1utter"),
+          elevation: 3,
+          scrolledUnderElevation: 3,
         ),
-        home: new Scaffold(
-          appBar: new AppBar(
-            title: new Text("F1utter"),
-          ),
-          bottomNavigationBar: new BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: currentTab,
-            onTap: this._tabTapped,
-            items: <BottomNavigationBarItem>[
-              new BottomNavigationBarItem( // tab 0
-                icon: new Icon(Icons.timer),
-                title: new Text("Schedule"),
-              ),
-              new BottomNavigationBarItem( // tab 1
-                icon: new Icon(Icons.equalizer),
-                title: new Text("Drivers"),
-              ),
-              new BottomNavigationBarItem( // tab 2
-                icon: new Icon(Icons.settings),
-                title: new Text("Settings"),
-              ),
-            ],
-          ),
-          body: this.currentPage,
+        backgroundColor: settingsState.themeData.colorScheme.background,
+        bottomNavigationBar: NavigationBar(
+          destinations: const <NavigationDestination>[
+            NavigationDestination(
+              icon: Icon(Icons.home),
+              label: 'Countdown',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.business),
+              label: 'Standings',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.business),
+              label: 'Settings',
+            ),
+          ],
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: _onDestinationSelected,
         ),
-      )
+        body: _widgetOptions.elementAt(_selectedIndex),
+      ),
     );
   }
 }
-
