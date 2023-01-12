@@ -45,7 +45,6 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     var settingsState = context.watch<Settings>();
-    print(settingsState.themeData.navigationBarTheme);
     return MaterialApp(
       title: 'Namer App',
       theme: settingsState.themeData,
