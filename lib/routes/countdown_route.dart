@@ -18,17 +18,25 @@ class _CountdownRouteState extends State<CountdownRoute> {
   List raceList = [];
   late Race closestRace;
   bool isLoading = true;
+  int _year = new DateTime.now().year;
 
   @override
   initState() {
     super.initState();
     getRaces();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var settings = Provider.of<Settings>(context, listen: false);
+      settings.setScaffoldActions([
+        IconButton(onPressed: getRaces, icon: Icon(Icons.refresh)),
+      ]);
+    });
   }
 
   instantiateRaces(res) {
     res = json.decode(res);
     var races = res["MRData"]["RaceTable"]["Races"];
-
+    print(races);
     for (var race in races) {
       try {
         Race _race = new Race.fromJson(race);
@@ -48,7 +56,7 @@ class _CountdownRouteState extends State<CountdownRoute> {
   }
 
   getRaces() async {
-    Api.getRacesByYear(2023).then((value) => instantiateRaces(value));
+    Api.getRacesByYear(_year).then((value) => instantiateRaces(value));
   }
 
   void _handleRaceTap(Race race, Settings context) {
@@ -61,7 +69,6 @@ class _CountdownRouteState extends State<CountdownRoute> {
   @override
   Widget build(BuildContext context) {
     Settings settingsState = Provider.of<Settings>(context, listen: true);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

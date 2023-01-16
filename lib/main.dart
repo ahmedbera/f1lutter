@@ -30,6 +30,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   int _selectedIndex = 0;
+
   static const List<Widget> _widgetOptions = <Widget>[
     CountdownRoute(),
     StandingsRoute(),
@@ -45,6 +46,7 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     var settingsState = context.watch<Settings>();
+
     return MaterialApp(
       title: 'Namer App',
       theme: settingsState.themeData,
@@ -53,6 +55,7 @@ class _MainViewState extends State<MainView> {
           title: const Text("F1utter"),
           elevation: 3,
           scrolledUnderElevation: 3,
+          actions: settingsState.scaffolActions,
         ),
         backgroundColor: settingsState.themeData.colorScheme.background,
         bottomNavigationBar: NavigationBar(
