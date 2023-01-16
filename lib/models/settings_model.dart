@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Settings extends ChangeNotifier {
   Brightness _brightness = Brightness.light;
   ColorScheme _colorScheme = ColorScheme.fromSeed(seedColor: Colors.deepOrange);
+  List<Widget> scaffolActions = [];
 
   late ThemeData themeData = ThemeData(
     useMaterial3: true,
@@ -30,6 +31,11 @@ class Settings extends ChangeNotifier {
       ),
     );
 
+    notifyListeners();
+  }
+
+  setScaffoldActions(var actions) {
+    scaffolActions = actions;
     notifyListeners();
   }
 }
