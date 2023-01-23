@@ -6,6 +6,7 @@ import 'package:f1lutter/models/race.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:f1lutter/models/settings_model.dart';
+import 'package:f1lutter/cache.dart';
 
 class CountdownRoute extends StatefulWidget {
   const CountdownRoute({super.key});
@@ -23,20 +24,27 @@ class _CountdownRouteState extends State<CountdownRoute> {
   @override
   initState() {
     super.initState();
-    getRaces();
+    // getRaces();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var settings = Provider.of<Settings>(context, listen: false);
       settings.setScaffoldActions([
         IconButton(onPressed: getRaces, icon: Icon(Icons.refresh)),
       ]);
+      var cache = CacheHelper();
+      cache.readRaceCache().then((value) {
+        if (value != null) {
+          instantiateRaces(value["data"]);
+        } else {
+          getRaces();
+        }
+      });
     });
   }
 
   instantiateRaces(res) {
     res = json.decode(res);
     var races = res["MRData"]["RaceTable"]["Races"];
-    print(races);
     for (var race in races) {
       try {
         Race _race = new Race.fromJson(race);

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:f1lutter/cache.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
@@ -13,14 +14,12 @@ class Api {
   }
 
   static Future<String> makeRequest(Uri uri) async {
-    // var httpClient = HttpClient();
-    // var request = await httpClient.getUrl(uri);
-    // var response = await request.close();
     var response = await http.get(uri);
+    var cache = CacheHelper();
 
     if (response.statusCode == HttpStatus.ok) {
-      // var json = await response.transform(utf8.decoder).join();
       var json = await response.body;
+      cache.writeRaceCache(json);
       return json;
     } else {
       return 'Error getting IP address:\nHttp status ${response.statusCode}';

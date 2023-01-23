@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:f1lutter/models/settings_model.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
