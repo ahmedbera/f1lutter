@@ -88,121 +88,123 @@ class _CurrentRaceState extends State<CurrentRace> {
     );
 
     return new InkWell(
-      // padding: new EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      // color: Colors.transparent,
-      onTap: toggleCard,
-      child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          // Flag + Country + City
-          new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        onTap: toggleCard,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        child: new Padding(
+          padding: new EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+          // color: Colors.transparent,
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Row(
-                children: [
-                  new CountryFlag(
-                      country: Country.fromCode(CountryCodeByString.getCode(widget.race.country)), height: 24.0),
-                  new Text(" " + widget.race.city + ", ", style: smallTextStyle),
-                  new Text(widget.race.country, style: smallTextStyle),
+              // Flag + Country + City
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      new CountryFlag(
+                          country: Country.fromCode(CountryCodeByString.getCode(widget.race.country)), height: 24.0),
+                      new Text(" " + widget.race.city + ", ", style: smallTextStyle),
+                      new Text(widget.race.country, style: smallTextStyle),
+                    ],
+                  ),
+                  Icon(isExpanded ? Icons.expand_less : Icons.expand_more)
                 ],
               ),
-              Icon(isExpanded ? Icons.expand_less : Icons.expand_more)
-            ],
-          ),
-          // Name, Date
-          Padding(padding: EdgeInsets.all(4.0)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                widget.race.title,
-                style: new TextStyle(
-                  fontSize: 36.0,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              Row(
+              // Name, Date
+              Padding(padding: EdgeInsets.all(4.0)),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.calendar_month,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  Padding(padding: EdgeInsets.all(2.0)),
+                children: <Widget>[
                   Text(
-                    widget.race.raceTime.toLocal().toString(),
-                    style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
+                    widget.race.title,
+                    style: new TextStyle(
+                      fontSize: 36.0,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.calendar_month,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      Padding(padding: EdgeInsets.all(2.0)),
+                      Text(
+                        widget.race.raceTime.toLocal().toString(),
+                        style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
+                      ),
+                    ],
+                  )
                 ],
-              )
+              ),
+              Padding(padding: EdgeInsets.all(4.0)),
+              // Countdown
+              widget.race.isCompleted
+                  ? new Text("Race Completed", style: countdownIntStyle)
+                  : new Row(
+                      textBaseline: TextBaseline.alphabetic,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      children: <Widget>[
+                        new Text(
+                          remainingDays,
+                          style: countdownIntStyle,
+                        ),
+                        new Padding(
+                          padding: new EdgeInsets.only(right: 6.0, left: 2.0),
+                          child: new Text(
+                            "D ",
+                            style: countdownStrStyle,
+                          ),
+                        ),
+                        new Text(remainingHours, style: countdownIntStyle),
+                        new Padding(
+                          padding: new EdgeInsets.only(right: 6.0, left: 2.0),
+                          child: new Text(
+                            "H ",
+                            style: countdownStrStyle,
+                          ),
+                        ),
+                        new Text(remainingMinutes, style: countdownIntStyle),
+                        new Padding(
+                          padding: new EdgeInsets.only(right: 6.0, left: 2.0),
+                          child: new Text(
+                            "M ",
+                            style: countdownStrStyle,
+                          ),
+                        ),
+                        new Text(remainingSeconds, style: countdownIntStyle),
+                        new Padding(
+                          padding: new EdgeInsets.only(right: 6.0, left: 2.0),
+                          child: new Text("S ", style: countdownStrStyle),
+                        ),
+                      ],
+                    ),
+              isExpanded
+                  ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Divider(),
+                      ...widget.race.sessionList
+                          .map(
+                            (e) => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                              Text(
+                                e.name,
+                                style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
+                              ),
+                              Text(
+                                e.sessionStart.toLocal().toString(),
+                                style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
+                              )
+                            ]),
+                          )
+                          .toList(),
+                    ])
+                  : Container()
             ],
           ),
-          Padding(padding: EdgeInsets.all(4.0)),
-          // Countdown
-          widget.race.isCompleted
-              ? new Text("Race Completed", style: countdownIntStyle)
-              : new Row(
-                  textBaseline: TextBaseline.alphabetic,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  children: <Widget>[
-                    new Text(
-                      remainingDays,
-                      style: countdownIntStyle,
-                    ),
-                    new Padding(
-                      padding: new EdgeInsets.only(right: 6.0, left: 2.0),
-                      child: new Text(
-                        "D ",
-                        style: countdownStrStyle,
-                      ),
-                    ),
-                    new Text(remainingHours, style: countdownIntStyle),
-                    new Padding(
-                      padding: new EdgeInsets.only(right: 6.0, left: 2.0),
-                      child: new Text(
-                        "H ",
-                        style: countdownStrStyle,
-                      ),
-                    ),
-                    new Text(remainingMinutes, style: countdownIntStyle),
-                    new Padding(
-                      padding: new EdgeInsets.only(right: 6.0, left: 2.0),
-                      child: new Text(
-                        "M ",
-                        style: countdownStrStyle,
-                      ),
-                    ),
-                    new Text(remainingSeconds, style: countdownIntStyle),
-                    new Padding(
-                      padding: new EdgeInsets.only(right: 6.0, left: 2.0),
-                      child: new Text("S ", style: countdownStrStyle),
-                    ),
-                  ],
-                ),
-          isExpanded
-              ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Divider(),
-                  ...widget.race.sessionList
-                      .map(
-                        (e) => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(
-                            e.name,
-                            style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
-                          ),
-                          Text(
-                            e.sessionStart.toLocal().toString(),
-                            style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
-                          )
-                        ]),
-                      )
-                      .toList(),
-                ])
-              : Container()
-        ],
-      ),
-    );
+        ));
   }
 }
