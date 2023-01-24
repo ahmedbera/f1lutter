@@ -1,3 +1,4 @@
+import 'package:f1lutter/cache.dart';
 import 'package:f1lutter/routes/countdown_route.dart';
 import 'package:f1lutter/routes/settings_route.dart';
 import 'package:f1lutter/routes/standings_route.dart';
@@ -13,11 +14,21 @@ void main() {
 class App extends StatelessWidget {
   const App({super.key});
 
-  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Settings(),
-      child: const MainView(),
+    CacheHelper cacheHelper = CacheHelper();
+    return FutureBuilder<dynamic>(
+      future: cacheHelper.readSettings(), // function where you call your api
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ChangeNotifierProvider(
+            create: (context) => Settings(snapshot.data?["isDark"]),
+            child: const MainView(),
+          );
+        } else {
+          // loading goes here
+          return Loading();
+        }
+      },
     );
   }
 }
@@ -80,5 +91,14 @@ class _MainViewState extends State<MainView> {
         body: _widgetOptions.elementAt(_selectedIndex),
       ),
     );
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
