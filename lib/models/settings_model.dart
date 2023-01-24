@@ -7,8 +7,11 @@ class Settings extends ChangeNotifier {
   Color _seedColor = Colors.deepOrange;
   List<Widget> scaffolActions = [];
 
-  Settings([bool isDark = false]) {
-    _brightness = isDark ? Brightness.dark : Brightness.light;
+  Settings(isDark) {
+    if (isDark == null)
+      _brightness = Brightness.dark;
+    else
+      _brightness = isDark ? Brightness.dark : Brightness.light;
   }
 
   late ThemeData themeData = ThemeData(
