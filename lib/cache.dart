@@ -4,8 +4,8 @@ import 'package:localstore/localstore.dart';
 class CacheHelper {
   final db = Localstore.instance;
 
-  void writeRaceCache(cache) async {
-    db.collection("cache").doc("races").set({"data": cache, "done": true});
+  void writeRaceCache(cache, cacheKey) async {
+    db.collection("cache").doc(cacheKey).set({"data": cache, "done": true});
   }
 
   void writeSettings(value) async {
@@ -13,7 +13,7 @@ class CacheHelper {
   }
 
   Future<Map<String, dynamic>?> readRaceCache() async {
-    return await db.collection("cache").doc("races").get();
+    return await db.collection("cache").doc("calendar").get();
   }
 
   Future readSettings() async {
