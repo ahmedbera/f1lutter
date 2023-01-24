@@ -73,15 +73,15 @@ class _MainViewState extends State<MainView> {
         bottomNavigationBar: NavigationBar(
           destinations: const <NavigationDestination>[
             NavigationDestination(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.timer),
               label: 'Countdown',
             ),
             NavigationDestination(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.bar_chart_rounded),
               label: 'Standings',
             ),
             NavigationDestination(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.settings),
               label: 'Settings',
             ),
           ],
