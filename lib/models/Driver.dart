@@ -15,6 +15,18 @@ class Driver {
     this.nationality = obj["nationality"];
   }
 
-  Driver(this.driverId, this.permanentNumber, this.code, this.familyName,
-      this.givenName, this.nationality);
+  String getName() {
+    return this.givenName + " " + this.familyName;
+  }
+
+  Driver(this.driverId, this.permanentNumber, this.code, this.familyName, this.givenName, this.nationality);
+}
+
+class DriverStandingModel {
+  Driver driver;
+  String position;
+  String points;
+  String wins;
+
+  DriverStandingModel(this.driver, this.position, this.points, this.wins);
 }
