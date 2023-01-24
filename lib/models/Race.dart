@@ -47,6 +47,7 @@ class Race {
     this.time = race["time"];
     this.city = race["Circuit"]["Location"]["locality"];
     this.country = race["Circuit"]["Location"]["country"];
+
     sessionList.add(Session(race["FirstPractice"]["date"], race["FirstPractice"]["time"], "Free Practice 1"));
 
     if (race["Sprint"] != null) {
@@ -59,7 +60,7 @@ class Race {
     }
 
     sessionList.add(Session(race["Qualifying"]["date"], race["Qualifying"]["time"], "Qualifying"));
-    sessionList.add(Session(race["FirstPractice"]["date"], race["FirstPractice"]["time"], "Grand Prix"));
+    sessionList.add(Session(race["date"], race["time"], "Grand Prix"));
 
     PaletteGenerator.fromImageProvider(
       Svg('packages/dash_flags/assets/svgs/flags/countries/country-${CountryCodeByString.getCode(this.country)}.svg',
