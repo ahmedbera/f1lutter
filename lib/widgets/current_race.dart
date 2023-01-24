@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:f1lutter/models/race.dart';
 import 'dart:async';
 
+import 'package:intl/intl.dart';
+
 class CurrentRace extends StatefulWidget {
   CurrentRace({required this.race}) : super();
 
@@ -135,7 +137,7 @@ class _CurrentRaceState extends State<CurrentRace> {
                       ),
                       Padding(padding: EdgeInsets.all(2.0)),
                       Text(
-                        widget.race.raceTime.toLocal().toString(),
+                        MaterialLocalizations.of(context).formatFullDate(widget.race.raceTime.toLocal()),
                         style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
                       ),
                     ],
@@ -195,7 +197,7 @@ class _CurrentRaceState extends State<CurrentRace> {
                                 style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
                               ),
                               Text(
-                                e.sessionStart.toLocal().toString(),
+                                DateFormat('EEEE - H:m0').format(e.sessionStart.toLocal()).toString(),
                                 style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
                               )
                             ]),

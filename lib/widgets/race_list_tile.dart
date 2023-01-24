@@ -63,7 +63,7 @@ class _RaceListTileState extends State<RaceListTile> {
                             widget.race.title,
                             textAlign: TextAlign.left,
                           ),
-                          new Text(widget.race.raceTime.toLocal().toString()),
+                          new Text(MaterialLocalizations.of(context).formatFullDate(widget.race.raceTime.toLocal())),
                           widget.race.isCompleted
                               ? new Text("Race Completed")
                               : new Row(
