@@ -1,16 +1,26 @@
-# f1lutter
+# f1utter
 
-A new Flutter project.
+Simple Formula 1 app written with Flutter.
++ Countdown remaining time until next race
++ Results of completed races
++ Driver and constructor standings
++ Switch between dark and light theme
++ Automatically extract colors from flags with [Material 3 Dynamic Color](https://m3.material.io/styles/color/dynamic-color/user-generated-color#35bc06c5-35d9-4559-9f5d-07ea734cbcb1)
 
-## Getting Started
+## Screenshots
 
-This project is a starting point for a Flutter application.
+![Countdown](https://ahmedbera.github.io/img/f1utter-v2-1.png)
+![Standings](https://ahmedbera.github.io/img/f1utter-v2-2.png)
 
-A few resources to get you started if this is your first Flutter project:
+## Build/Run
+App is configured to run on Android and Web. Easiest way to run is using Visual Studio Code with browser of your choice.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+git clone https://github.com/ahmedbera/f1lutter
+cd f1lutter
+flutter pub get
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Acknowledgements 
+* Data is provided by [Ergast Motor Racing Developer API](https://ergast.com/mrd/)
