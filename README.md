@@ -19,6 +19,7 @@ App is configured to run on Android and Web. Easiest way to run is using Visual 
 git clone https://github.com/ahmedbera/f1lutter
 cd f1lutter
 flutter pub get
+flutter pub run flutter_launcher_icons # only if you want to update icons
 flutter run
 ```
 

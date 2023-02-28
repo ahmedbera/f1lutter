@@ -197,7 +197,7 @@ class _CurrentRaceState extends State<CurrentRace> {
                                 style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
                               ),
                               Text(
-                                DateFormat('EEEE - H:m0').format(e.sessionStart.toLocal()).toString(),
+                                DateFormat('EEEE - H:mm').format(e.sessionStart.toLocal()).toString(),
                                 style: new TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.secondary),
                               )
                             ]),
