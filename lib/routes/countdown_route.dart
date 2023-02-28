@@ -38,6 +38,8 @@ class _CountdownRouteState extends State<CountdownRoute> {
         } else {
           getRaces();
         }
+      }).catchError((onError) {
+        getRaces();
       });
     });
   }
