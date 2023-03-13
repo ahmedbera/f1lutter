@@ -1,3 +1,4 @@
+import 'package:f1lutter/routes/race_results.dart';
 import 'package:flutter/material.dart';
 import 'package:f1lutter/models/race.dart';
 import 'package:f1lutter/static/country_code.dart';
@@ -86,7 +87,8 @@ class _RaceListTileState extends State<RaceListTile> {
               ? new TextButton(
                   child: new Text("Results"),
                   onPressed: () {
-                    // Navigator.push(context, new MaterialPageRoute(builder: (context) => new RaceResultPage(raceData: this.widget.race)));
+                    Navigator.push(context,
+                        new MaterialPageRoute(builder: (context) => new RaceResultPage(raceData: this.widget.race)));
                   },
                 )
               : new Container()

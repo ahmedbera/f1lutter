@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:f1lutter/static/country_code.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
@@ -36,6 +37,14 @@ class Race {
 
   Race(this.id, this.round, this.title, this.date, this.time, this.city, this.country) {
     _calculateDate();
+  }
+
+  Future<Color> getColor() async {
+    PaletteGenerator palette = await PaletteGenerator.fromImageProvider(
+      Svg('packages/dash_flags/assets/svgs/flags/countries/country-${CountryCodeByString.getCode(this.country)}.svg',
+          size: Size(90, 60)),
+    );
+    return palette.paletteColors.first.color;
   }
 
   Race.fromJson(race) {

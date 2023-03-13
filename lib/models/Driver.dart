@@ -6,6 +6,8 @@ class Driver {
   String familyName = "";
   String nationality = "";
 
+  Driver.empty() {}
+
   Driver.fromJson(obj) {
     this.driverId = obj["driverId"];
     this.permanentNumber = obj["permanentNumber"];

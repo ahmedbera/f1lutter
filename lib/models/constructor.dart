@@ -14,6 +14,8 @@ class Constructor {
   String name = "";
   String nationality = "";
 
+  Constructor.empty() {}
+
   Constructor.fromJson(obj) {
     this.constructorId = obj["constructorId"];
     this.name = obj["name"];
