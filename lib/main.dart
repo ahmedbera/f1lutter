@@ -60,7 +60,7 @@ class _MainViewState extends State<MainView> {
     var settingsState = context.watch<Settings>();
 
     return MaterialApp(
-      title: 'Namer App',
+      title: 'F1utter',
       theme: settingsState.themeData,
       home: Scaffold(
         appBar: AppBar(

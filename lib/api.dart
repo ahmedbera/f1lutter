@@ -31,6 +31,12 @@ class Api {
     return makeRequest(uri, "constructors");
   }
 
+  static Future<String> getRaceResultsByRound(String year, String round) {
+    Uri uri = Uri.http("ergast.com", "/api/f1/" + year + "/" + round + "/results.json");
+
+    return makeRequest(uri, "raceResult_" + year + round);
+  }
+
   static Future<String> makeRequest(Uri uri, String dbKey) async {
     var response = await http.get(uri);
     var cache = CacheHelper();

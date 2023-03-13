@@ -1,8 +1,8 @@
+import 'package:f1lutter/models/race.dart';
 import 'package:f1lutter/widgets/current_race.dart';
 import 'package:f1lutter/widgets/race_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:f1lutter/api.dart';
-import 'package:f1lutter/models/race.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:f1lutter/models/settings_model.dart';
@@ -24,10 +24,9 @@ class _CountdownRouteState extends State<CountdownRoute> {
   @override
   initState() {
     super.initState();
-    // getRaces();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var settings = Provider.of<Settings>(context, listen: false);
+      Settings settings = Provider.of<Settings>(context, listen: false);
       settings.setScaffoldActions([
         IconButton(onPressed: getRaces, icon: Icon(Icons.refresh)),
       ]);
@@ -51,9 +50,13 @@ class _CountdownRouteState extends State<CountdownRoute> {
       try {
         Race _race = new Race.fromJson(race);
         if (!_race.isCompleted && isLoading) {
+          Settings settings = Provider.of<Settings>(context, listen: false);
           setState(() {
             closestRace = _race;
             isLoading = false;
+          });
+          _race.getColor().then((Color color) {
+            settings.setColor(_race.primaryColor);
           });
         }
         raceList.add(_race);
