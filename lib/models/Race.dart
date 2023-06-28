@@ -71,6 +71,9 @@ class Race {
     sessionList.add(Session(race["Qualifying"]["date"], race["Qualifying"]["time"], "Qualifying"));
     sessionList.add(Session(race["date"], race["time"], "Grand Prix"));
 
+    // sort sessions by datetime because sprints mess up the order
+    sessionList.sort(((a, b) => a.sessionStart.compareTo(b.sessionStart)));
+
     PaletteGenerator.fromImageProvider(
       Svg('packages/dash_flags/assets/svgs/flags/countries/country-${CountryCodeByString.getCode(this.country)}.svg',
           size: Size(90, 60)),
