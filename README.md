@@ -24,4 +24,4 @@ flutter run
 ```
 
 ## Acknowledgements 
-* Data is provided by [Ergast Motor Racing Developer API](https://ergast.com/mrd/)
+* Data is provided by [Jolpi](https://api.jolpi.ca/ergast/)

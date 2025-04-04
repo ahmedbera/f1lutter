@@ -40,13 +40,15 @@ class _StandingsRouteState extends State<StandingsRoute> {
 
     var driverStandings = standings["DriverStandings"];
 
+    int i = 1;
     for (var driver in driverStandings) {
       standingsList.add(new DriverStandingModel(
         new Driver.fromJson(driver["Driver"]),
-        driver["position"],
+        driver["position"] ?? i.toString(),
         driver["points"],
         driver["wins"],
       ));
+      i++;
     }
 
     this.setState(() {
@@ -122,7 +124,8 @@ class _StandingsRouteState extends State<StandingsRoute> {
               : ListView.builder(
                   itemCount: constructorStandingList.length,
                   itemBuilder: (context, index) {
-                    ConstructorStandingModel item = constructorStandingList[index];
+                    ConstructorStandingModel item =
+                        constructorStandingList[index];
                     return ListTile(
                       leading: Text(item.position),
                       title: Text(item.constructor.name),

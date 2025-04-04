@@ -4,11 +4,13 @@ import 'package:f1lutter/cache.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
+  static String baseUrl = "api.jolpi.ca";
+
   static Future<String> getRacesByYear(int year) {
     if (year.toString().length != 4) {
       throw Exception("Wrong parameter: year");
     }
-    Uri seasonUri = Uri.https("ergast.com", "/api/f1/$year.json");
+    Uri seasonUri = Uri.https(baseUrl, "/ergast/f1/$year.json");
 
     return makeRequest(seasonUri, "calendar");
   }
@@ -17,7 +19,7 @@ class Api {
     if (year.toString().length != 4) {
       throw Exception("Wrong parameter: year");
     }
-    Uri uri = Uri.https("ergast.com", "/api/f1/$year/driverStandings.json");
+    Uri uri = Uri.https(baseUrl, "/ergast/f1/$year/driverStandings.json");
 
     return makeRequest(uri, "drivers");
   }
@@ -26,19 +28,19 @@ class Api {
     if (year.toString().length != 4) {
       throw Exception("Wrong parameter: year");
     }
-    Uri uri = Uri.https("ergast.com", "/api/f1/$year/constructorStandings.json");
+    Uri uri = Uri.https(baseUrl, "/ergast/f1/$year/constructorStandings.json");
 
     return makeRequest(uri, "constructors");
   }
 
   static Future<String> getRaceResultsByRound(String year, String round) {
-    Uri uri = Uri.http("ergast.com", "/api/f1/" + year + "/" + round + "/results.json");
+    Uri uri = Uri.http(baseUrl, "/ergast/f1/" + year + "/" + round + "/results.json");
 
     return makeRequest(uri, "raceResult_" + year + round);
   }
 
   static Future<String> makeRequest(Uri uri, String dbKey) async {
-    var response = await http.get(uri);
+  var response = await http.get(uri);
     var cache = CacheHelper();
 
     if (response.statusCode == HttpStatus.ok) {

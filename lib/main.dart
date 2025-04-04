@@ -69,7 +69,7 @@ class _MainViewState extends State<MainView> {
           scrolledUnderElevation: 3,
           actions: settingsState.scaffolActions,
         ),
-        backgroundColor: settingsState.themeData.colorScheme.background,
+        backgroundColor: settingsState.themeData.colorScheme.surface,
         bottomNavigationBar: NavigationBar(
           destinations: const <NavigationDestination>[
             NavigationDestination(
